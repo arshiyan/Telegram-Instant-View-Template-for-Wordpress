@@ -6,20 +6,31 @@
 $main:  //div[@id="main"]/div
 
 header: //header
-$body1: $main//div[2]/div[@class="entry-content"]
-
 
 title: $main//h1[1]
 
+
+
+$body1: $main//div[2]/div[@class="entry-content"]
+
 @remove: //article/header
 @remove: //article/footer
+@remove: $body//footer
+@remove: $body1//footer[@class="container_wrap socket_color"]
+@remove: $body1//footer[@class="container_wrap"]
+@remove: //span[@class="copyright"]
 
 body: $body1
-
-@remove: $body1//footer[@class="container_wrap socket_color"]
-
 subtitle: $main//div[2]/div/p
-cover: //img[has-class("wp-post-image")]
+
+# Cover <meta>
+$meta_cover: //meta[@property="og:image"]
+@set_attr(src, @content): $meta_cover
+<img>: $meta_cover
+cover: $@
+
+#cover: //img[has-class("wp-post-image")]
+
 @inline: $body//iframe[starts-with(@src, "/media/")]
 
 $body2 : $main//div[@class="entry-content-wrapper clearfix"]/div[0]
@@ -30,11 +41,18 @@ $body3 : $main//div[@class="entry-content-wrapper clearfix"]/div[1]
 @before(<hr>) :$main//div[@class="entry-content-wrapper clearfix"]/div
 @append_to($body): $body3
 
+@before(<hr>): $body//figure[.//img[number(@data-height) < 30][(number(@data-width) > number(@data-height) * 30)]]
+
+channel : @the14ir
+site_name: "مرکز پاسخگویی به شبهات فضای مجازی"
+
 # Replace p to figure
 @replace_tag(<figure>): $body//p[.//img]
 # Youtube Embedded Fix
 @replace_tag(<figure>): $body//p[.//iframe]
 
+image_url: //head/meta[@property="og:image"]/@content
 
 
+description: $body1
 @debug
