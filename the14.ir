@@ -10,7 +10,10 @@ $body1: $main//div[2]/div[@class="entry-content"]
 
 
 title: $main//h1[1]
-@remove: $body//footer
+
+@remove: //article/header
+@remove: //article/footer
+
 body: $body1
 
 @remove: $body1//footer[@class="container_wrap socket_color"]
